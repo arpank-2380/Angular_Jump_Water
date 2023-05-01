@@ -5,9 +5,9 @@ liquid water and aqueous solutions from an molecular-dynamics trajectory.
 Please see the reference below:
 
 Kundu, A. 
-[Dynamical behavior of supercritical aqueous solutions:
-Orientational motion and angular jumps.
-Indian Institute of Technology Kanpur, 2011.](http://dx.doi.org/10.13140/RG.2.2.10428.10884)
+[Dynamical behavior of supercritical aqueous solutions: Orientational motion and 
+angular jumps.](http://dx.doi.org/10.13140/RG.2.2.10428.10884)
+Indian Institute of Technology Kanpur, 2011.
 
 # Installation
 
