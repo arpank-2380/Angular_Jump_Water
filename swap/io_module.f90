@@ -83,6 +83,57 @@
                enddo
               enddo
 
+          case( "gro" )
+              if ( .not. reading ) then
+                 read(51,*) junk1, boxl, boxl2, boxl3, box_alpha, box_beta, box_gamma, junk2, junk4, junk5
+                 trajectory_line=1
+                 start_read_frame=1 
+              endif
+              reading = .true. 
+              !write(*,*) "started reading frame:", start_read_frame, "at line ", trajectory_line+1
+              do i=start_read_frame,last_frame
+                 !write(*,*) iframe, rframe
+                 if ( iframe .eq. ntotal ) exit
+                 rframe = rframe + 1
+                 store_data = .false.
+                 if ( ( i .ge. first_frame ) .and. (i .le. last_frame) ) then
+                    remainder_frame = mod (i-first_frame, step_frame)
+                    if ( remainder_frame .eq. 0 ) then
+                       store_data = .true.
+                       iframe = iframe + 1
+                    endif
+                 endif
+
+                 do j=1,natom
+                    trajectory_line=trajectory_line+1
+                    read(51,*,iostat=ios) junk1, junk4, symbol, junk2, junk3, junk5, &
+                                      & x,y,z, junk6, junk7
+                    if (ios.ne.0) then
+                        write(*,*) "Cannot read trajectory line =", trajectory_line
+                        stop
+                    endif
+
+                    if ( store_data ) then
+                        kk=j/3
+                        If (mod(j,3).eq.1) then
+                           cx(iframe,kk+1)=x
+                           cy(iframe,kk+1)=y
+                           cz(iframe,kk+1)=z
+                        else if (mod(j,3).eq.2) then
+                           cx(iframe,nn+1+2*kk)=x
+                           cy(iframe,nn+1+2*kk)=y
+                           cz(iframe,nn+1+2*kk)=z
+                        else
+                           cx(iframe,nn+2*kk)=x
+                           cy(iframe,nn+2*kk)=y
+                           cz(iframe,nn+2*kk)=z
+                        endif
+                    endif
+               enddo
+               read(51,'(A)')
+               trajectory_line = trajectory_line + 1
+              enddo
+
           case ( "xyz" )
               if (.not. reading ) then
                  start_read_frame = 1
